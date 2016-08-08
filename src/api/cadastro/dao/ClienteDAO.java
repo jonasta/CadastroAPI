@@ -45,13 +45,13 @@ public class ClienteDAO {
 			sql += " Where 1=1";
 
 			if (!isNull(pesquisa.getNome()))
-				sql += " And data ->> 'nome' = ?";
+				sql += " And upper(data ->> 'nome') like upper(?)";
 
 			if (!isNull(pesquisa.getEmail()))
-				sql += " And data ->> 'email' = ?";
+				sql += " And upper(data ->> 'email') like upper(?)";
 
 			if (!isNull(pesquisa.getCpf()))
-				sql += " And data ->> 'cpf' = ?";
+				sql += " And data ->> 'cpf' like ?";
 
 			if (!isNull(pesquisa.getDataInicio()))
 				sql += " And to_date(data->>'nascimento', 'dd-MM-yyyy') >= ?";
@@ -63,13 +63,13 @@ public class ClienteDAO {
 
 			int i = 1;
 			if (!isNull(pesquisa.getNome()))
-				stmt.setString(i++, pesquisa.getNome());
+				stmt.setString(i++, pesquisa.getNome() + "%");
 
 			if (!isNull(pesquisa.getEmail()))
-				stmt.setString(i++, pesquisa.getEmail());
+				stmt.setString(i++, pesquisa.getEmail() + "%");
 
 			if (!isNull(pesquisa.getCpf()))
-				stmt.setString(i++, pesquisa.getCpf());
+				stmt.setString(i++, pesquisa.getCpf() + "%");
 
 			if (!isNull(pesquisa.getDataInicio())) {
 				LocalDate ld = pesquisa.getDataInicio().toLocalDate();
