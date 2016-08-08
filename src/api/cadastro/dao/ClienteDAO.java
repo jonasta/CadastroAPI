@@ -58,6 +58,7 @@ public class ClienteDAO {
 
 			if (!isNull(pesquisa.getDataFim()))
 				sql += " And to_date(data->>'nascimento', 'dd-MM-yyyy') <= ?";
+			sql += " Order by data ->> 'nome'";
 
 			stmt = con.prepareStatement(sql);
 
@@ -206,6 +207,48 @@ public class ClienteDAO {
 			rs = stmt.executeQuery();
 			if (rs.next()) {
 
+				Cliente cliente = gson.fromJson(rs.getString("data"), Cliente.class);
+				cliente.setId(rs.getInt("id"));
+				result = cliente;
+			}
+
+		} catch (SQLException e) {
+			throw new Exception(e);
+		} finally {
+			if (con != null) {
+				con.close();
+				con = null;
+			}
+		}
+		return result;
+	}
+	
+	public Cliente pesquisaPorCpf(String cpf, Integer id) throws Exception {
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "";
+		Cliente result = null;
+
+		try {
+
+			con = DBConnection.getConnection();
+			sql = "Select * From Cliente";
+			sql += " Where data ->> 'cpf' = ?";
+			
+			if(id != null && id > 0)
+				sql += " And id <> ?";
+			
+			stmt = con.prepareStatement(sql);
+
+			stmt.setString(1, cpf);
+			
+			if(id != null && id > 0)
+				stmt.setInt(2, id);
+			
+			rs = stmt.executeQuery();
+			if (rs.next()) {
 				Cliente cliente = gson.fromJson(rs.getString("data"), Cliente.class);
 				cliente.setId(rs.getInt("id"));
 				result = cliente;
