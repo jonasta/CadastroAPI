@@ -1,3 +1,7 @@
+Java version "1.8.0_101"
+
+Tomcat 8.0
+
 Banco de Dados : PostgreSQL 9.5
 
 Usuario : postgres
