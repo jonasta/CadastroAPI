@@ -43,6 +43,16 @@ public class ClienteService {
 	}
 	
 	@GET
+	@Path("/tester")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public String tester() {
+
+		return "mensagem de teste bem sucedido!";
+
+	}
+	
+	
+	@GET
 	@Path("/pesquisaPorId")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response pesquisa(@QueryParam("id") int id) {
